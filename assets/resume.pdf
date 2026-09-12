@@ -1,0 +1,25 @@
+:root {
+    --bg-primary: #070a12;
+    --bg-secondary: #0d1220;
+
+    --text-primary: #ffffff;
+    --text-secondary: #a7afc0;
+
+    --primary: #7c5cff;
+    --secondary: #00d4ff;
+
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --border: rgba(255, 255, 255, 0.10);
+
+    --gradient: linear-gradient(
+        135deg,
+        #7c5cff,
+        #00d4ff
+    );
+
+    --max-width: 1200px;
+
+    --radius: 20px;
+
+    --transition: 0.3s ease;
+}
