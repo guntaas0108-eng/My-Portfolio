@@ -1806,11 +1806,21 @@
         That's usually where I start. Open for internships, technical projects, and visionary collaborations.
       </p>
 
-      <div>
-        <a href="mailto:guntaassingh0108@gmail.com" class="contact-email-link">
+      <div style="display:flex; flex-direction:column; gap:1.25rem; align-items:flex-start;">
+        <a href="mailto:guntaassingh0108@gmail.com?subject=Hello%20Guntaas%20-%20Project%20Collaboration" class="contact-email-link" id="email-main-btn">
           <span>guntaassingh0108@gmail.com</span>
-          <span class="contact-arrow">↗</span>
+          <span class="contact-arrow">&#x2197;</span>
         </a>
+
+        <!-- Direct Compose & Quick Actions -->
+        <div style="display:flex; flex-wrap:wrap; gap:0.75rem; margin-top:0.25rem;">
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=guntaassingh0108@gmail.com&su=Hello%20Guntaas" target="_blank" rel="noopener noreferrer" style="font-family:var(--font-sans); font-size:var(--fs-eyebrow); text-transform:uppercase; letter-spacing:0.18em; padding:0.6rem 1.2rem; border:1px solid var(--line-strong); border-radius:9999px; color:var(--foreground); transition:all 0.25s; display:inline-flex; align-items:center; gap:0.5rem;" onmouseover="this.style.borderColor='var(--accent)'; this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--line-strong)'; this.style.color='var(--foreground)'">
+            <span>Compose in Gmail Web</span> &#x2197;
+          </a>
+          <button onclick="copyEmailAddress(this)" type="button" style="font-family:var(--font-sans); font-size:var(--fs-eyebrow); text-transform:uppercase; letter-spacing:0.18em; padding:0.6rem 1.2rem; border:1px solid var(--line); border-radius:9999px; color:var(--muted); transition:all 0.25s; cursor:pointer; display:inline-flex; align-items:center; gap:0.5rem;" onmouseover="this.style.borderColor='var(--line-strong)'; this.style.color='var(--foreground)'" onmouseout="this.style.borderColor='var(--line)'; this.style.color='var(--muted)'">
+            <span id="copy-btn-text">Copy Address</span>
+          </button>
+        </div>
       </div>
 
       <!-- Footer bottom bar -->
@@ -2060,6 +2070,22 @@
     };
 
     window.selectVoice(0);
-  </script>
+  
+    // Copy email helper
+    window.copyEmailAddress = function(btn) {
+      navigator.clipboard.writeText('guntaassingh0108@gmail.com').then(() => {
+        const textSpan = document.getElementById('copy-btn-text');
+        const orig = textSpan.textContent;
+        textSpan.textContent = 'COPIED TO CLIPBOARD ✓';
+        btn.style.borderColor = 'var(--accent)';
+        btn.style.color = 'var(--accent)';
+        setTimeout(() => {
+          textSpan.textContent = orig;
+          btn.style.borderColor = 'var(--line)';
+          btn.style.color = 'var(--muted)';
+        }, 2500);
+      });
+    };
+</script>
 </body>
 </html>
