@@ -1895,42 +1895,53 @@
     applyAdaptiveGrid();
     window.addEventListener("resize", applyAdaptiveGrid);
 
-    // 3. Preloader (0 -> 100 over 2000ms, wipe 650ms, then reveal hero)
+    // 3. Preloader synced directly to full video animation (blooming sequence)
     const preloader = document.getElementById('preloader');
     const counterEl = document.getElementById('preload-counter');
     const brandEl = document.getElementById('preload-brand');
+    const loaderVideo = document.querySelector('.preloader-video');
 
     lenis.stop();
     window.scrollTo(0, 0);
 
-    const startTime = performance.now();
-    const duration = 2000;
+    let finished = false;
 
-    function updatePreloader(now) {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const current = Math.floor(progress * 100);
-      counterEl.innerHTML = current + '<span>%</span>';
+    function completeLoadingSequence() {
+      if (finished) return;
+      finished = true;
+      counterEl.innerHTML = '100<span>%</span>';
+      counterEl.style.opacity = '0';
+      brandEl.style.opacity = '0';
 
-      if (progress < 1) {
-        requestAnimationFrame(updatePreloader);
-      } else {
-        counterEl.style.opacity = '0';
-        brandEl.style.opacity = '0';
+      setTimeout(() => {
+        preloader.classList.add('wiping');
 
         setTimeout(() => {
-          preloader.classList.add('wiping');
-
-          setTimeout(() => {
-            lenis.start();
-            preloader.classList.add('done');
-            preloader.setAttribute('aria-hidden', 'true');
-            document.body.classList.add('hero-revealed');
-          }, 650);
-        }, 200);
-      }
+          lenis.start();
+          preloader.classList.add('done');
+          preloader.setAttribute('aria-hidden', 'true');
+          document.body.classList.add('hero-revealed');
+        }, 650);
+      }, 300);
     }
-    requestAnimationFrame(updatePreloader);
+
+    if (loaderVideo) {
+      // Sync percentage directly to video playback time so full blooming animation plays
+      loaderVideo.addEventListener('timeupdate', () => {
+        if (!loaderVideo.duration) return;
+        const pct = Math.min(Math.floor((loaderVideo.currentTime / loaderVideo.duration) * 100), 100);
+        counterEl.innerHTML = pct + '<span>%</span>';
+        if (loaderVideo.currentTime >= loaderVideo.duration - 0.2) {
+          completeLoadingSequence();
+        }
+      });
+      loaderVideo.addEventListener('ended', completeLoadingSequence);
+
+      // Fallback in case autoplay is delayed or restricted
+      setTimeout(completeLoadingSequence, 5000);
+    } else {
+      setTimeout(completeLoadingSequence, 4500);
+    }
 
     // 4. Mobile Burger Menu
     const burgerToggle = document.getElementById('burger-toggle');
